@@ -84,7 +84,6 @@ var easeInOutCubic = function (pos) {
   return 0.5 * (Math.pow((pos - 2), 3) + 2);
 };
 
-
 Scroller.prototype = {
 
   /*
@@ -125,7 +124,6 @@ Scroller.prototype = {
    * {Boolean} Smoothly animating the currently configured change
    */
   __isAnimating: false,
-
 
   /*
    ---------------------------------------------------------------------------
@@ -181,7 +179,6 @@ Scroller.prototype = {
   /* {Number} Scheduled zoom level (final scale when animating) */
   __scheduledZoom: 0,
 
-
   /*
    ---------------------------------------------------------------------------
    INTERNAL FIELDS :: LAST POSITIONS
@@ -199,7 +196,6 @@ Scroller.prototype = {
 
   /** {Array} List of positions, uses three indexes for each state: left, top, timestamp */
   __positions: null,
-
 
   /*
    ---------------------------------------------------------------------------
@@ -224,7 +220,6 @@ Scroller.prototype = {
 
   /** {Number} Current factor to modify vertical scroll position with on every step */
   __decelerationVelocityY: null,
-
 
   /*
    ---------------------------------------------------------------------------
@@ -267,7 +262,6 @@ Scroller.prototype = {
     this.scrollTo(this.__scrollLeft, this.__scrollTop, true);
   },
 
-
   /**
    * Sets the client coordinates in relation to the document.
    *
@@ -279,7 +273,6 @@ Scroller.prototype = {
     this.__clientTop = top || 0;
   },
 
-
   /**
    * Configures the snapping (when snapping is active)
    *
@@ -290,7 +283,6 @@ Scroller.prototype = {
     this.__snapWidth = width;
     this.__snapHeight = height;
   },
-
 
   /**
    * Returns the scroll position and zooming values
@@ -307,7 +299,6 @@ Scroller.prototype = {
     };
   },
 
-
   /**
    * Get point in in content space from scroll coordinates.
    */
@@ -319,7 +310,6 @@ Scroller.prototype = {
       top: scrollTop / values.zoom
     };
   },
-
 
   /**
    * Returns the maximum scroll values
@@ -333,7 +323,6 @@ Scroller.prototype = {
     };
   },
 
-
   /**
    * Zooms to the given level. Supports optional animation. Zooms
    * the center when no coordinates are given.
@@ -346,7 +335,7 @@ Scroller.prototype = {
    */
   zoomTo: function (level, isAnimated, fixedLeft, fixedTop, callback) {
     if (!this.options.zooming) {
-      throw new Error("Zooming is not enabled!");
+      throw new Error('Zooming is not enabled!');
     }
 
     // Add callback if exists
@@ -420,7 +409,6 @@ Scroller.prototype = {
     this.__publish(left, top, level, isAnimated);
   },
 
-
   /**
    * Zooms the content by the given factor.
    *
@@ -433,7 +421,6 @@ Scroller.prototype = {
   zoomBy: function (factor, isAnimated, originLeft, originTop, callback) {
     this.zoomTo(this.__zoomLevel * factor, isAnimated, originLeft, originTop, callback);
   },
-
 
   /**
    * Scrolls to the given position. Respect limitations and snapping automatically.
@@ -453,7 +440,7 @@ Scroller.prototype = {
     // Correct coordinates based on new zoom level
     if (zoom !== undefined && zoom !== this.__zoomLevel) {
       if (!this.options.zooming) {
-        throw new Error("Zooming is not enabled!");
+        throw new Error('Zooming is not enabled!');
       }
 
       left *= zoom;
@@ -500,7 +487,6 @@ Scroller.prototype = {
     this.__publish(left, top, zoom, isAnimated);
   },
 
-
   /**
    * Scroll by the given offset
    *
@@ -514,7 +500,6 @@ Scroller.prototype = {
 
     this.scrollTo(startLeft + (left || 0), startTop + (top || 0), isAnimated);
   },
-
 
   /*
    ---------------------------------------------------------------------------
@@ -531,21 +516,20 @@ Scroller.prototype = {
     return this.zoomTo(this.__zoomLevel * change, false, pageX - this.__clientLeft, pageY - this.__clientTop);
   },
 
-
   /**
    * Touch start handler for scrolling support
    */
   doTouchStart: function (touches, timeStamp) {
     // Array-like check is enough here
     if (touches.length === undefined) {
-      throw new Error("Invalid touch list: " + touches);
+      throw new Error('Invalid touch list: ' + touches);
     }
 
     if (timeStamp instanceof Date) {
       timeStamp = timeStamp.valueOf();
     }
-    if (typeof timeStamp !== "number") {
-      throw new Error("Invalid timestamp value: " + timeStamp);
+    if (typeof timeStamp !== 'number') {
+      throw new Error('Invalid timestamp value: ' + timeStamp);
     }
 
     // Reset interruptedAnimation flag
@@ -613,7 +597,6 @@ Scroller.prototype = {
     this.__positions = [];
   },
 
-
   /**
    * Touch move handler for scrolling support
    * @param {Number} [1.0] scale - ....
@@ -621,14 +604,14 @@ Scroller.prototype = {
   doTouchMove: function (touches, timeStamp, scale) {
     // Array-like check is enough here
     if (touches.length === undefined) {
-      throw new Error("Invalid touch list: " + touches);
+      throw new Error('Invalid touch list: ' + touches);
     }
 
     if (timeStamp instanceof Date) {
       timeStamp = timeStamp.valueOf();
     }
-    if (typeof timeStamp !== "number") {
-      throw new Error("Invalid timestamp value: " + timeStamp);
+    if (typeof timeStamp !== 'number') {
+      throw new Error('Invalid timestamp value: ' + timeStamp);
     }
 
     // Ignore event when tracking is not enabled (event might be outside of element)
@@ -755,7 +738,6 @@ Scroller.prototype = {
     this.__lastScale = scale;
   },
 
-
   /**
    * Touch end handler for scrolling support
    */
@@ -763,8 +745,8 @@ Scroller.prototype = {
     if (timeStamp instanceof Date) {
       timeStamp = timeStamp.valueOf();
     }
-    if (typeof timeStamp !== "number") {
-      throw new Error("Invalid timestamp value: " + timeStamp);
+    if (typeof timeStamp !== 'number') {
+      throw new Error('Invalid timestamp value: ' + timeStamp);
     }
 
     // Ignore event when tracking is not enabled (no touchstart event on element)
@@ -838,7 +820,6 @@ Scroller.prototype = {
     this.__positions.length = 0;
   },
 
-
   /*
    ---------------------------------------------------------------------------
    PRIVATE API
@@ -911,7 +892,6 @@ Scroller.prototype = {
 
       // When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
       this.__isAnimating = animate.start(step, verify, completed, this.options.animationDuration, wasAnimating ? easeOutCubic : easeInOutCubic);
-
     } else {
       this.__scheduledLeft = this.__scrollLeft = left;
       this.__scheduledTop = this.__scrollTop = top;
@@ -933,7 +913,6 @@ Scroller.prototype = {
     }
   },
 
-
   /**
    * Recomputes scroll minimum values based on client dimensions and content dimensions.
    */
@@ -945,7 +924,6 @@ Scroller.prototype = {
     this.__maxScrollLeft = Math.max(this.__contentWidth * zoomLevel - this.__clientWidth, 0);
     this.__maxScrollTop = Math.max(this.__contentHeight * zoomLevel - this.__clientHeight, 0);
   },
-
 
   /*
    ---------------------------------------------------------------------------
@@ -1009,14 +987,12 @@ Scroller.prototype = {
     this.__isDecelerating = animate.start(step, verify, completed);
   },
 
-
   /**
    * Called on every step of the animation
    *
    * @param inMemory {Boolean?false} Whether to not render the current step, but keep it in memory only. Used internally only!
    */
   __stepThroughDeceleration: function (render) {
-
     //
     // COMPUTE NEXT SCROLL POSITION
     //
@@ -1024,7 +1000,6 @@ Scroller.prototype = {
     // Add deceleration to scroll position
     var scrollLeft = this.__scrollLeft + this.__decelerationVelocityX;
     var scrollTop = this.__scrollTop + this.__decelerationVelocityY;
-
 
     //
     // HARD LIMIT SCROLL POSITION FOR NON BOUNCING MODE
@@ -1044,7 +1019,6 @@ Scroller.prototype = {
       }
     }
 
-
     //
     // UPDATE SCROLL POSITION
     //
@@ -1055,7 +1029,6 @@ Scroller.prototype = {
       this.__scrollLeft = scrollLeft;
       this.__scrollTop = scrollTop;
     }
-
 
     //
     // SLOW DOWN
@@ -1071,7 +1044,6 @@ Scroller.prototype = {
       this.__decelerationVelocityX *= frictionFactor;
       this.__decelerationVelocityY *= frictionFactor;
     }
-
 
     //
     // BOUNCING SUPPORT

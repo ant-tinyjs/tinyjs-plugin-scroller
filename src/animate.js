@@ -1,5 +1,6 @@
 var global = typeof window === 'undefined' ? this : window;
-var time = Date.now || function () {
+var time = Date.now ||
+  function () {
     return +new Date();
   };
 var desiredFrames = 60;
@@ -18,7 +19,7 @@ exports.requestAnimationFrame = (function () {
   var requestFrame = global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || global.oRequestAnimationFrame;
   var isNative = !!requestFrame;
 
-  if (requestFrame && !/requestAnimationFrame\(\)\s*\{\s*\[native code\]\s*\}/i.test(requestFrame.toString())) {
+  if (requestFrame && !/requestAnimationFrame\(\)\s*\{\s*\[native code\]\s*\}/i.test(requestFrame.toString())) { // eslint-disable-line
     isNative = false;
   }
 
@@ -30,7 +31,7 @@ exports.requestAnimationFrame = (function () {
 
   var TARGET_FPS = 60;
   var requests = {};
-  var requestCount = 0;
+  var requestCount = 0; //eslint-disable-line
   var rafHandle = 1;
   var intervalHandle = null;
   var lastActive = +new Date();
@@ -44,9 +45,7 @@ exports.requestAnimationFrame = (function () {
 
     // Create timeout at first request
     if (intervalHandle === null) {
-
       intervalHandle = setInterval(function () {
-
         var time = +new Date();
         var currentRequests = requests;
 
@@ -67,13 +66,11 @@ exports.requestAnimationFrame = (function () {
           clearInterval(intervalHandle);
           intervalHandle = null;
         }
-
       }, 1000 / TARGET_FPS);
     }
 
     return callbackHandle;
   };
-
 })();
 
 /**
@@ -91,7 +88,6 @@ exports.stop = function (id) {
   return cleared;
 };
 
-
 /**
  * Whether the given animation is still running.
  *
@@ -101,7 +97,6 @@ exports.stop = function (id) {
 exports.isRunning = function (id) {
   return running[id] !== null;
 };
-
 
 /**
  * Start the animation.
@@ -136,7 +131,6 @@ exports.start = function (stepCallback, verifyCallback, completedCallback, durat
 
   // This is the internal step method which is called every few milliseconds
   var step = function (virtual) {
-
     // Normalize virtual value
     var render = virtual !== true;
 
@@ -145,23 +139,19 @@ exports.start = function (stepCallback, verifyCallback, completedCallback, durat
 
     // Verification is executed before next animation step
     if (!running[id] || (verifyCallback && !verifyCallback(id))) {
-
       running[id] = null;
       completedCallback(desiredFrames - (dropCounter / ((now - start) / millisecondsPerSecond)), id, false);
       return;
-
     }
 
     // For the current rendering to apply let's update omitted steps in memory.
     // This is important to bring internal state variables up-to-date with progress in time.
     if (render) {
-
       var droppedFrames = Math.round((now - lastFrame) / (millisecondsPerSecond / desiredFrames)) - 1;
       for (var j = 0; j < Math.min(droppedFrames, 4); j++) {
         step(true);
         dropCounter++;
       }
-
     }
 
     // Compute percent value
