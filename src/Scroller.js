@@ -5,6 +5,10 @@ var NOOP = function () {
 
 /**
  * A pure logic 'component' for 'virtual' scrolling/zooming.
+ *
+ * @param callback
+ * @param options
+ * @constructor
  */
 var Scroller = function (callback, options) {
   this.__callback = callback;
@@ -131,28 +135,28 @@ Scroller.prototype = {
    ---------------------------------------------------------------------------
    */
 
-  /** {Integer} Viewport left boundary */
+  /** {number} Viewport left boundary */
   __clientLeft: 0,
 
-  /** {Integer} Viewport right boundary */
+  /** {number} Viewport right boundary */
   __clientTop: 0,
 
-  /** {Integer} Viewport width */
+  /** {number} Viewport width */
   __clientWidth: 0,
 
-  /** {Integer} Viewport height */
+  /** {number} Viewport height */
   __clientHeight: 0,
 
-  /** {Integer} Full content's width */
+  /** {number} Full content's width */
   __contentWidth: 0,
 
-  /** {Integer} Full content's height */
+  /** {number} Full content's height */
   __contentHeight: 0,
 
-  /** {Integer} Snapping width for content */
+  /** {number} Snapping width for content */
   __snapWidth: 100,
 
-  /** {Integer} Snapping height for content */
+  /** {number} Snapping height for content */
   __snapHeight: 100,
 
   /** {Number} Zoom level */
@@ -164,10 +168,10 @@ Scroller.prototype = {
   /** {Number} Scroll position on y-axis */
   __scrollTop: 0,
 
-  /** {Integer} Maximum allowed scroll position on x-axis */
+  /** {number} Maximum allowed scroll position on x-axis */
   __maxScrollLeft: 0,
 
-  /** {Integer} Maximum allowed scroll position on y-axis */
+  /** {number} Maximum allowed scroll position on y-axis */
   __maxScrollTop: 0,
 
   /* {Number} Scheduled left position (final position when animating) */
@@ -203,16 +207,16 @@ Scroller.prototype = {
    ---------------------------------------------------------------------------
    */
 
-  /** {Integer} Minimum left scroll position during deceleration */
+  /** {number} Minimum left scroll position during deceleration */
   __minDecelerationScrollLeft: null,
 
-  /** {Integer} Minimum top scroll position during deceleration */
+  /** {number} Minimum top scroll position during deceleration */
   __minDecelerationScrollTop: null,
 
-  /** {Integer} Maximum left scroll position during deceleration */
+  /** {number} Maximum left scroll position during deceleration */
   __maxDecelerationScrollLeft: null,
 
-  /** {Integer} Maximum top scroll position during deceleration */
+  /** {number} Maximum top scroll position during deceleration */
   __maxDecelerationScrollTop: null,
 
   /** {Number} Current factor to modify horizontal scroll position with on every step */
@@ -232,10 +236,10 @@ Scroller.prototype = {
    * Requires the available space for the outer element and the outer size of the inner element.
    * All values which are falsy (null or zero etc.) are ignored and the old value is kept.
    *
-   * @param clientWidth {Integer ? null} Inner width of outer element
-   * @param clientHeight {Integer ? null} Inner height of outer element
-   * @param contentWidth {Integer ? null} Outer width of inner element
-   * @param contentHeight {Integer ? null} Outer height of inner element
+   * @param clientWidth {number | null} Inner width of outer element
+   * @param clientHeight {number | null} Inner height of outer element
+   * @param contentWidth {number | null} Outer width of inner element
+   * @param contentHeight {number | null} Outer height of inner element
    */
   setDimensions: function (clientWidth, clientHeight, contentWidth, contentHeight) {
     // Only update values which are defined
@@ -265,8 +269,8 @@ Scroller.prototype = {
   /**
    * Sets the client coordinates in relation to the document.
    *
-   * @param left {Integer ? 0} Left position of outer element
-   * @param top {Integer ? 0} Top position of outer element
+   * @param left {number | 0} Left position of outer element
+   * @param top {number | 0} Top position of outer element
    */
   setPosition: function (left, top) {
     this.__clientLeft = left || 0;
@@ -276,8 +280,8 @@ Scroller.prototype = {
   /**
    * Configures the snapping (when snapping is active)
    *
-   * @param width {Integer} Snapping width
-   * @param height {Integer} Snapping height
+   * @param width {number} Snapping width
+   * @param height {number} Snapping height
    */
   setSnapSize: function (width, height) {
     this.__snapWidth = width;
@@ -328,10 +332,10 @@ Scroller.prototype = {
    * the center when no coordinates are given.
    *
    * @param level {Number} Level to zoom to
-   * @param isAnimated {Boolean ? false} Whether to use animation
-   * @param fixedLeft {Number ? undefined} Stationary point's left coordinate (vector in client space)
-   * @param fixedTop {Number ? undefined} Stationary point's top coordinate (vector in client space)
-   * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
+   * @param isAnimated {Boolean | false} Whether to use animation
+   * @param fixedLeft {Number | undefined} Stationary point's left coordinate (vector in client space)
+   * @param fixedTop {Number | undefined} Stationary point's top coordinate (vector in client space)
+   * @param callback {Function | null} A callback that gets fired when the zoom is complete.
    */
   zoomTo: function (level, isAnimated, fixedLeft, fixedTop, callback) {
     if (!this.options.zooming) {
@@ -413,10 +417,10 @@ Scroller.prototype = {
    * Zooms the content by the given factor.
    *
    * @param factor {Number} Zoom by given factor
-   * @param isAnimated {Boolean ? false} Whether to use animation
-   * @param originLeft {Number ? 0} Zoom in at given left coordinate
-   * @param originTop {Number ? 0} Zoom in at given top coordinate
-   * @param callback {Function ? null} A callback that gets fired when the zoom is complete.
+   * @param isAnimated {Boolean | false} Whether to use animation
+   * @param originLeft {Number | 0} Zoom in at given left coordinate
+   * @param originTop {Number | 0} Zoom in at given top coordinate
+   * @param callback {Function | null} A callback that gets fired when the zoom is complete.
    */
   zoomBy: function (factor, isAnimated, originLeft, originTop, callback) {
     this.zoomTo(this.__zoomLevel * factor, isAnimated, originLeft, originTop, callback);
@@ -425,9 +429,9 @@ Scroller.prototype = {
   /**
    * Scrolls to the given position. Respect limitations and snapping automatically.
    *
-   * @param left {Number?null} Horizontal scroll position, keeps current if value is <code>null</code>
-   * @param top {Number?null} Vertical scroll position, keeps current if value is <code>null</code>
-   * @param isAnimated {Boolean?false} Whether the scrolling should happen using an animation
+   * @param left {Number|null} Horizontal scroll position, keeps current if value is <code>null</code>
+   * @param top {Number|null} Vertical scroll position, keeps current if value is <code>null</code>
+   * @param isAnimated {Boolean|false} Whether the scrolling should happen using an animation
    * @param zoom {Number} [1.0] Zoom level to go to
    */
   scrollTo: function (left, top, isAnimated, zoom) {
@@ -490,9 +494,9 @@ Scroller.prototype = {
   /**
    * Scroll by the given offset
    *
-   * @param left {Number ? 0} Scroll x-axis by given offset
-   * @param top {Number ? 0} Scroll x-axis by given offset
-   * @param isAnimated {Boolean ? false} Whether to animate the given change
+   * @param left {Number | 0} Scroll x-axis by given offset
+   * @param top {Number | 0} Scroll x-axis by given offset
+   * @param isAnimated {Boolean | false} Whether to animate the given change
    */
   scrollBy: function (left, top, isAnimated) {
     var startLeft = this.__isAnimating ? this.__scheduledLeft : this.__scrollLeft;
@@ -831,7 +835,7 @@ Scroller.prototype = {
    *
    * @param left {Number} Left scroll position
    * @param top {Number} Top scroll position
-   * @param isAnimated {Boolean?false} Whether animation should be used to move to the new coordinates
+   * @param isAnimated {Boolean|false} Whether animation should be used to move to the new coordinates
    */
   __publish: function (left, top, zoom, isAnimated) {
     // Remember whether we had an animation, then we try to continue
@@ -990,7 +994,7 @@ Scroller.prototype = {
   /**
    * Called on every step of the animation
    *
-   * @param inMemory {Boolean?false} Whether to not render the current step, but keep it in memory only. Used internally only!
+   * @param inMemory {Boolean|false} Whether to not render the current step, but keep it in memory only. Used internally only!
    */
   __stepThroughDeceleration: function (render) {
     //
