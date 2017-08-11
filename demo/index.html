@@ -13,11 +13,15 @@ html, body, p, div {margin:0;padding:0;}
 </head>
 <body>
 
-<script src="http://tinyjs.net/libs/tiny.debug.js"></script>
+<script src="https://a.alipayobjects.com/g/tiny/tiny/1.1.0/tiny.js"></script>
 <script src="../dist/index.js"></script>
 
 <script type="text/javascript">
-  var app = new Tiny.Application();
+  var app = new Tiny.Application({
+    height: 400,
+    width: 400,
+    fixSize: true,
+  });
   var ant = Tiny.Sprite.fromImage('https://zos.alipayobjects.com/rmsportal/IJwbZnAkuJOhKqDXngUm.png');
   var container = new Tiny.Container();
   var scroller = new Tiny.Scroller(function (left, top, zoom) {
@@ -31,13 +35,18 @@ html, body, p, div {margin:0;padding:0;}
   container.addChild(ant);
   container.on('pointerdown', function (data) {
     var e = data.data.originalEvent;
-    scroller.doTouchStart(e.touches, e.timeStamp);
+    scroller.doTouchStart(e.touches || [e], e.timeStamp);
   });
   container.on('pointermove', function (data) {
     var e = data.data.originalEvent;
-    scroller.doTouchMove(e.touches, e.timeStamp, e.scale);
+    scroller.doTouchMove(e.touches || [e], e.timeStamp, e.scale);
   });
   container.on('pointerup', function (data) {
+    const e = data.data.originalEvent;
+    scroller.doTouchEnd(e.timeStamp);
+  });
+  // 移出屏幕的事件监听
+  container.on('pointerupoutside', function (data) {
     const e = data.data.originalEvent;
     scroller.doTouchEnd(e.timeStamp);
   });
