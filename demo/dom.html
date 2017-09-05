@@ -9,48 +9,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"/>
 <style>
 html, body, p, div {margin:0;padding:0;}
+.cell {
+  height: 400px;
+  overflow-y: hidden;
+  background-color: #f5f5f5;
+}
+.container {
+  font-size: 72px;
+}
 </style>
 </head>
 <body>
+
+<div class="cell">
+  <div id="J-container" class="container">
+    1</br>2</br>3</br>4</br>5</br>6</br>7</br>8</br>9</br>10
+  </div>
+</div>
 
 <script src="https://a.alipayobjects.com/g/tiny/tiny/1.1.4/tiny.js"></script>
 <script src="../dist/index.js"></script>
 
 <script type="text/javascript">
-  var app = new Tiny.Application({
-    height: 400,
-    width: 400,
-    fixSize: true,
-  });
-  var ant = Tiny.Sprite.fromImage('https://zos.alipayobjects.com/rmsportal/IJwbZnAkuJOhKqDXngUm.png');
-  var container = new Tiny.Container();
+  var container = document.getElementById('J-container');
   var scroller = new Tiny.Scroller(function (left, top, zoom) {
-    container.position.y = -top;
+    container.style.transform = 'translateY('+ -top +'px)';
   }, {
     scrollingY: true,
   });
-  scroller.setDimensions(Tiny.WIN_SIZE.width, Tiny.WIN_SIZE.height, Tiny.WIN_SIZE.width, Tiny.WIN_SIZE.height);
-  container.interactive = true;
-  container.hitArea = new Tiny.Rectangle(0, 0, Tiny.WIN_SIZE.width, Tiny.WIN_SIZE.height);
-  container.addChild(ant);
-  container.on('pointerdown', function (data) {
-    var e = data.data.originalEvent;
+  scroller.setDimensions(window.innerWidth, 400, container.clientWidth, container.clientHeight);
+  container.addEventListener('touchstart', function (e) {
     scroller.doTouchStart(e.touches || [e], e.timeStamp);
   });
-  container.on('pointermove', function (data) {
-    var e = data.data.originalEvent;
+  container.addEventListener('touchmove', function (e) {
     scroller.doTouchMove(e.touches || [e], e.timeStamp, e.scale);
   });
-  container.on('pointerup', function (data) {
-    const e = data.data.originalEvent;
+  container.addEventListener('touchend', function (e) {
     scroller.doTouchEnd(e.timeStamp);
   });
-  // 移出屏幕的事件监听
-  container.on('pointerupoutside', function (data) {
-    const e = data.data.originalEvent;
+  container.addEventListener('touchcancel', function (e) {
     scroller.doTouchEnd(e.timeStamp);
   });
-  app.run(container);
 </script>
 </body>
 </html>
