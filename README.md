@@ -4,7 +4,7 @@
 
 ## 查看demo
 
-http://tinyjs.net/#/plugins/tinyjs-plugin-scroller/demo
+http://tinyjs.net/plugins/tinyjs-plugin-scroller.html#demo
 
 ## 引用方法
 
@@ -31,7 +31,7 @@ http://tinyjs.net/#/plugins/tinyjs-plugin-scroller/demo
   </div>
 </div>
 // 引用 Tiny.js 源码
-<script src="https://gw.alipayobjects.com/as/g/tiny/tiny/1.1.5/tiny.js"></script>
+<script src="https://gw.alipayobjects.com/as/g/tiny/tiny/1.1.7/tiny.js"></script>
 ```
 
 ``` css
@@ -81,8 +81,8 @@ container.addEventListener('touchcancel', function (e) {
 ```
 
 ## 依赖
-- `Tiny.js`: [Link](http://tinyjs.net/#/docs/api)
+- `Tiny.js`: [Link](http://tinyjs.net/api)
 
 ## API文档
 
-http://tinyjs.net/#/plugins/tinyjs-plugin-scroller/docs
+http://tinyjs.net/plugins/tinyjs-plugin-scroller.html#docs
