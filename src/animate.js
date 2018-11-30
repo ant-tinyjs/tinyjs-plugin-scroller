@@ -1,6 +1,6 @@
 var global = typeof window === 'undefined' ? this : window;
 var time = Date.now ||
-  function () {
+  function() {
     return +new Date();
   };
 var desiredFrames = 60;
@@ -11,10 +11,10 @@ var counter = 1;
 /**
  * A requestAnimationFrame wrapper / polyfill.
  *
- * @param callback {Function} The callback to be invoked before the next repaint.
- * @param root {HTMLElement} The root element for the repaint
+ * @param {function} callback - The callback to be invoked before the next repaint.
+ * @param {HTMLElement} root - The root element for the repaint
  */
-exports.requestAnimationFrame = (function () {
+exports.requestAnimationFrame = (function() {
   // Check for request animation Frame support
   var requestFrame = global.requestAnimationFrame || global.webkitRequestAnimationFrame || global.mozRequestAnimationFrame || global.oRequestAnimationFrame;
   var isNative = !!requestFrame;
@@ -24,7 +24,7 @@ exports.requestAnimationFrame = (function () {
   }
 
   if (isNative) {
-    return function (callback, root) {
+    return function(callback, root) {
       requestFrame(callback, root);
     };
   }
@@ -36,7 +36,7 @@ exports.requestAnimationFrame = (function () {
   var intervalHandle = null;
   var lastActive = +new Date();
 
-  return function (callback, root) {
+  return function(callback, root) {
     var callbackHandle = rafHandle++;
 
     // Store callback
@@ -45,7 +45,7 @@ exports.requestAnimationFrame = (function () {
 
     // Create timeout at first request
     if (intervalHandle === null) {
-      intervalHandle = setInterval(function () {
+      intervalHandle = setInterval(function() {
         var time = +new Date();
         var currentRequests = requests;
 
@@ -76,10 +76,10 @@ exports.requestAnimationFrame = (function () {
 /**
  * Stops the given animation.
  *
- * @param id {Integer} Unique animation ID
- * @return {Boolean} Whether the animation was stopped (aka, was running before)
+ * @param {number} id - Unique animation ID
+ * @return {boolean} Whether the animation was stopped (aka, was running before)
  */
-exports.stop = function (id) {
+exports.stop = function(id) {
   var cleared = (running[id] !== null);
   if (cleared) {
     running[id] = null;
@@ -91,29 +91,25 @@ exports.stop = function (id) {
 /**
  * Whether the given animation is still running.
  *
- * @param id {Integer} Unique animation ID
- * @return {Boolean} Whether the animation is still running
+ * @param {number} id - Unique animation ID
+ * @return {boolean} Whether the animation is still running
  */
-exports.isRunning = function (id) {
+exports.isRunning = function(id) {
   return running[id] !== null;
 };
 
 /**
  * Start the animation.
  *
- * @param stepCallback {Function} Pointer to function which is executed on every step.
- *   Signature of the method should be `function(percent, now, virtual) { return continueWithAnimation; }`
- * @param verifyCallback {Function} Executed before every animation step.
- *   Signature of the method should be `function() { return continueWithAnimation; }`
- * @param completedCallback {Function}
- *   Signature of the method should be `function(droppedFrames, finishedAnimation, optional wasFinished) {}`
- * @param duration {Integer} Milliseconds to run the animation
- * @param easingMethod {Function} Pointer to easing function
- *   Signature of the method should be `function(percent) { return modifiedValue; }`
- * @param root {Element} Render root. Used for internal usage of requestAnimationFrame.
- * @return {Integer} Identifier of animation. Can be used to stop it any time.
+ * @param {function} stepCallback - Pointer to function which is executed on every step. Signature of the method should be `function(percent, now, virtual) { return continueWithAnimation; }`
+ * @param {function} verifyCallback - Executed before every animation step. Signature of the method should be `function() { return continueWithAnimation; }`
+ * @param {function} completedCallback - Signature of the method should be `function(droppedFrames, finishedAnimation, optional wasFinished) {}`
+ * @param {number} duration - Milliseconds to run the animation
+ * @param {function} easingMethod - Pointer to easing function Signature of the method should be `function(percent) { return modifiedValue; }`
+ * @param {Element} root - Render root. Used for internal usage of requestAnimationFrame.
+ * @return {number} Identifier of animation. Can be used to stop it any time.
  */
-exports.start = function (stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) {
+exports.start = function(stepCallback, verifyCallback, completedCallback, duration, easingMethod, root) {
   var start = time();
   var lastFrame = start;
   var percent = 0;
@@ -130,7 +126,7 @@ exports.start = function (stepCallback, verifyCallback, completedCallback, durat
   }
 
   // This is the internal step method which is called every few milliseconds
-  var step = function (virtual) {
+  var step = function(virtual) {
     // Normalize virtual value
     var render = virtual !== true;
 

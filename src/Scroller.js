@@ -1,7 +1,6 @@
 import animate from './animate';
 
-var NOOP = function () {
-};
+var NOOP = function() {};
 
 /**
  * A pure logic 'component' for 'virtual' scrolling/zooming.
@@ -10,7 +9,7 @@ var NOOP = function () {
  * @param options
  * @constructor
  */
-var Scroller = function (callback, options) {
+var Scroller = function(callback, options) {
   this.__callback = callback;
 
   this.options = {
@@ -59,7 +58,7 @@ var Scroller = function (callback, options) {
     penetrationDeceleration: 0.03,
 
     /** This configures the amount of change applied to acceleration when reaching boundaries  **/
-    penetrationAcceleration: 0.08
+    penetrationAcceleration: 0.08,
   };
 
   for (var key in options) {
@@ -71,16 +70,16 @@ var Scroller = function (callback, options) {
 // Open source under the BSD License.
 
 /**
- * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+ * @param {number} pos - position between 0 (start of effect) and 1 (end of effect)
  **/
-var easeOutCubic = function (pos) {
+var easeOutCubic = function(pos) {
   return (Math.pow((pos - 1), 3) + 1);
 };
 
 /**
- * @param pos {Number} position between 0 (start of effect) and 1 (end of effect)
+ * @param {number} pos - position between 0 (start of effect) and 1 (end of effect)
  **/
-var easeInOutCubic = function (pos) {
+var easeInOutCubic = function(pos) {
   if ((pos /= 0.5) < 1) {
     return 0.5 * Math.pow(pos, 3);
   }
@@ -236,12 +235,12 @@ Scroller.prototype = {
    * Requires the available space for the outer element and the outer size of the inner element.
    * All values which are falsy (null or zero etc.) are ignored and the old value is kept.
    *
-   * @param clientWidth {number | null} Inner width of outer element
-   * @param clientHeight {number | null} Inner height of outer element
-   * @param contentWidth {number | null} Outer width of inner element
-   * @param contentHeight {number | null} Outer height of inner element
+   * @param {number|null} clientWidth - Inner width of outer element
+   * @param {number|null} clientHeight - Inner height of outer element
+   * @param {number|null} contentWidth - Outer width of inner element
+   * @param {number|null} contentHeight - Outer height of inner element
    */
-  setDimensions: function (clientWidth, clientHeight, contentWidth, contentHeight) {
+  setDimensions: function(clientWidth, clientHeight, contentWidth, contentHeight) {
     // Only update values which are defined
     if (clientWidth !== null) {
       this.__clientWidth = clientWidth;
@@ -269,10 +268,10 @@ Scroller.prototype = {
   /**
    * Sets the client coordinates in relation to the document.
    *
-   * @param left {number | 0} Left position of outer element
-   * @param top {number | 0} Top position of outer element
+   * @param {number|0} left - Left position of outer element
+   * @param {number|0} top - Top position of outer element
    */
-  setPosition: function (left, top) {
+  setPosition: function(left, top) {
     this.__clientLeft = left || 0;
     this.__clientTop = top || 0;
   },
@@ -280,10 +279,10 @@ Scroller.prototype = {
   /**
    * Configures the snapping (when snapping is active)
    *
-   * @param width {number} Snapping width
-   * @param height {number} Snapping height
+   * @param {number} width - Snapping width
+   * @param {number} height - Snapping height
    */
-  setSnapSize: function (width, height) {
+  setSnapSize: function(width, height) {
     this.__snapWidth = width;
     this.__snapHeight = height;
   },
@@ -293,25 +292,25 @@ Scroller.prototype = {
    *
    * @return {Map} `left` and `top` scroll position and `zoom` level
    */
-  getValues: function () {
+  getValues: function() {
     return {
       left: this.__scrollLeft,
       top: this.__scrollTop,
       right: this.__scrollLeft + this.__clientWidth / this.__zoomLevel,
       bottom: this.__scrollTop + this.__clientHeight / this.__zoomLevel,
-      zoom: this.__zoomLevel
+      zoom: this.__zoomLevel,
     };
   },
 
   /**
    * Get point in in content space from scroll coordinates.
    */
-  getPoint: function (scrollLeft, scrollTop) {
+  getPoint: function(scrollLeft, scrollTop) {
     var values = this.getValues();
 
     return {
       left: scrollLeft / values.zoom,
-      top: scrollTop / values.zoom
+      top: scrollTop / values.zoom,
     };
   },
 
@@ -320,10 +319,10 @@ Scroller.prototype = {
    *
    * @return {Map} `left` and `top` maximum scroll values
    */
-  getScrollMax: function () {
+  getScrollMax: function() {
     return {
       left: this.__maxScrollLeft,
-      top: this.__maxScrollTop
+      top: this.__maxScrollTop,
     };
   },
 
@@ -331,13 +330,13 @@ Scroller.prototype = {
    * Zooms to the given level. Supports optional animation. Zooms
    * the center when no coordinates are given.
    *
-   * @param level {Number} Level to zoom to
-   * @param isAnimated {Boolean | false} Whether to use animation
-   * @param fixedLeft {Number | undefined} Stationary point's left coordinate (vector in client space)
-   * @param fixedTop {Number | undefined} Stationary point's top coordinate (vector in client space)
-   * @param callback {Function | null} A callback that gets fired when the zoom is complete.
+   * @param {number} level - Level to zoom to
+   * @param {boolean|false} isAnimated -  Whether to use animation
+   * @param {number|undefined} fixedLeft - Stationary point's left coordinate (vector in client space)
+   * @param {number|undefined} fixedTop - Stationary point's top coordinate (vector in client space)
+   * @param {function|null} callback - A callback that gets fired when the zoom is complete.
    */
-  zoomTo: function (level, isAnimated, fixedLeft, fixedTop, callback) {
+  zoomTo: function(level, isAnimated, fixedLeft, fixedTop, callback) {
     if (!this.options.zooming) {
       throw new Error('Zooming is not enabled!');
     }
@@ -416,25 +415,25 @@ Scroller.prototype = {
   /**
    * Zooms the content by the given factor.
    *
-   * @param factor {Number} Zoom by given factor
-   * @param isAnimated {Boolean | false} Whether to use animation
-   * @param originLeft {Number | 0} Zoom in at given left coordinate
-   * @param originTop {Number | 0} Zoom in at given top coordinate
-   * @param callback {Function | null} A callback that gets fired when the zoom is complete.
+   * @param {number} factor - Zoom by given factor
+   * @param {boolean|false} isAnimated - Whether to use animation
+   * @param {number|0} originLeft - Zoom in at given left coordinate
+   * @param {number|0} originTop - Zoom in at given top coordinate
+   * @param {function|null} callback - A callback that gets fired when the zoom is complete.
    */
-  zoomBy: function (factor, isAnimated, originLeft, originTop, callback) {
+  zoomBy: function(factor, isAnimated, originLeft, originTop, callback) {
     this.zoomTo(this.__zoomLevel * factor, isAnimated, originLeft, originTop, callback);
   },
 
   /**
    * Scrolls to the given position. Respect limitations and snapping automatically.
    *
-   * @param left {Number|null} Horizontal scroll position, keeps current if value is <code>null</code>
-   * @param top {Number|null} Vertical scroll position, keeps current if value is <code>null</code>
-   * @param isAnimated {Boolean|false} Whether the scrolling should happen using an animation
-   * @param zoom {Number} [1.0] Zoom level to go to
+   * @param {number|null} left - Horizontal scroll position, keeps current if value is <code>null</code>
+   * @param {number|null} top - Vertical scroll position, keeps current if value is <code>null</code>
+   * @param {boolean|false} isAnimated - Whether the scrolling should happen using an animation
+   * @param {number} zoom - [1.0] Zoom level to go to
    */
-  scrollTo: function (left, top, isAnimated, zoom) {
+  scrollTo: function(left, top, isAnimated, zoom) {
     // Stop deceleration
     if (this.__isDecelerating) {
       animate.stop(this.__isDecelerating);
@@ -494,11 +493,11 @@ Scroller.prototype = {
   /**
    * Scroll by the given offset
    *
-   * @param left {Number | 0} Scroll x-axis by given offset
-   * @param top {Number | 0} Scroll x-axis by given offset
-   * @param isAnimated {Boolean | false} Whether to animate the given change
+   * @param {number|0} left - Scroll x-axis by given offset
+   * @param {number|0} top - Scroll x-axis by given offset
+   * @param {boolean|false} isAnimated - Whether to animate the given change
    */
-  scrollBy: function (left, top, isAnimated) {
+  scrollBy: function(left, top, isAnimated) {
     var startLeft = this.__isAnimating ? this.__scheduledLeft : this.__scrollLeft;
     var startTop = this.__isAnimating ? this.__scheduledTop : this.__scrollTop;
 
@@ -514,7 +513,7 @@ Scroller.prototype = {
   /**
    * Mouse wheel handler for zooming support
    */
-  doMouseZoom: function (wheelDelta, timeStamp, pageX, pageY) {
+  doMouseZoom: function(wheelDelta, timeStamp, pageX, pageY) {
     var change = wheelDelta > 0 ? 0.97 : 1.03;
 
     return this.zoomTo(this.__zoomLevel * change, false, pageX - this.__clientLeft, pageY - this.__clientTop);
@@ -523,7 +522,7 @@ Scroller.prototype = {
   /**
    * Touch start handler for scrolling support
    */
-  doTouchStart: function (touches, timeStamp) {
+  doTouchStart: function(touches, timeStamp) {
     // Array-like check is enough here
     if (touches.length === undefined) {
       throw new Error('Invalid touch list: ' + touches);
@@ -603,9 +602,10 @@ Scroller.prototype = {
 
   /**
    * Touch move handler for scrolling support
-   * @param {Number} [1.0] scale - ....
+   *
+   * @param {number} [1.0] - scale - ....
    */
-  doTouchMove: function (touches, timeStamp, scale) {
+  doTouchMove: function(touches, timeStamp, scale) {
     // Array-like check is enough here
     if (touches.length === undefined) {
       throw new Error('Invalid touch list: ' + touches);
@@ -745,7 +745,7 @@ Scroller.prototype = {
   /**
    * Touch end handler for scrolling support
    */
-  doTouchEnd: function (timeStamp) {
+  doTouchEnd: function(timeStamp) {
     if (timeStamp instanceof Date) {
       timeStamp = timeStamp.valueOf();
     }
@@ -833,11 +833,11 @@ Scroller.prototype = {
   /**
    * Applies the scroll position to the content element
    *
-   * @param left {Number} Left scroll position
-   * @param top {Number} Top scroll position
-   * @param isAnimated {Boolean|false} Whether animation should be used to move to the new coordinates
+   * @param {number} left - Left scroll position
+   * @param {number} top - Top scroll position
+   * @param {boolean|false} isAnimated - Whether animation should be used to move to the new coordinates
    */
-  __publish: function (left, top, zoom, isAnimated) {
+  __publish: function(left, top, zoom, isAnimated) {
     // Remember whether we had an animation, then we try to continue
     // based on the current "drive" of the animation.
     var wasAnimating = this.__isAnimating;
@@ -860,7 +860,7 @@ Scroller.prototype = {
       var diffTop = top - oldTop;
       var diffZoom = zoom - oldZoom;
 
-      var step = function (percent, now, render) {
+      var step = function(percent, now, render) {
         if (render) {
           this.__scrollLeft = oldLeft + (diffLeft * percent);
           this.__scrollTop = oldTop + (diffTop * percent);
@@ -873,11 +873,11 @@ Scroller.prototype = {
         }
       }.bind(this);
 
-      var verify = function (id) {
+      var verify = function(id) {
         return this.__isAnimating === id;
       }.bind(this);
 
-      var completed = function (renderedFramesPerSecond, animationId, wasFinished) {
+      var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
         if (animationId === this.__isAnimating) {
           this.__isAnimating = false;
         }
@@ -920,7 +920,7 @@ Scroller.prototype = {
   /**
    * Recomputes scroll minimum values based on client dimensions and content dimensions.
    */
-  __computeScrollMax: function (zoomLevel) {
+  __computeScrollMax: function(zoomLevel) {
     if (zoomLevel === undefined) {
       zoomLevel = this.__zoomLevel;
     }
@@ -936,10 +936,9 @@ Scroller.prototype = {
    */
 
   /**
-   * Called when a touch sequence end and the speed of the finger was high enough
-   * to switch into deceleration mode.
+   * Called when a touch sequence end and the speed of the finger was high enough to switch into deceleration mode.
    */
-  __startDeceleration: function (timeStamp) {
+  __startDeceleration: function(timeStamp) {
     if (this.options.paging) {
       var scrollLeft = Math.max(Math.min(this.__scrollLeft, this.__maxScrollLeft), 0);
       var scrollTop = Math.max(Math.min(this.__scrollTop, this.__maxScrollTop), 0);
@@ -960,7 +959,7 @@ Scroller.prototype = {
     }
 
     // Wrap class method
-    var step = function (percent, now, render) {
+    var step = function(percent, now, render) {
       this.__stepThroughDeceleration(render);
     }.bind(this);
 
@@ -969,7 +968,7 @@ Scroller.prototype = {
 
     // Detect whether it's still worth to continue animating steps
     // If we are already slow enough to not being user perceivable anymore, we stop the whole process here.
-    var verify = function () {
+    var verify = function() {
       var shouldContinue = Math.abs(this.__decelerationVelocityX) >= minVelocityToKeepDecelerating || Math.abs(this.__decelerationVelocityY) >= minVelocityToKeepDecelerating;
       if (!shouldContinue) {
         this.__didDecelerationComplete = true;
@@ -977,7 +976,7 @@ Scroller.prototype = {
       return shouldContinue;
     }.bind(this);
 
-    var completed = function (renderedFramesPerSecond, animationId, wasFinished) {
+    var completed = function(renderedFramesPerSecond, animationId, wasFinished) {
       this.__isDecelerating = false;
       if (this.__didDecelerationComplete) {
         this.options.scrollingComplete();
@@ -994,9 +993,9 @@ Scroller.prototype = {
   /**
    * Called on every step of the animation
    *
-   * @param inMemory {Boolean|false} Whether to not render the current step, but keep it in memory only. Used internally only!
+   * @param {boolean|false} inMemory - Whether to not render the current step, but keep it in memory only. Used internally only!
    */
-  __stepThroughDeceleration: function (render) {
+  __stepThroughDeceleration: function(render) {
     //
     // COMPUTE NEXT SCROLL POSITION
     //
@@ -1091,7 +1090,7 @@ Scroller.prototype = {
         }
       }
     }
-  }
+  },
 };
 
-module.exports = Scroller;
+export default Scroller;

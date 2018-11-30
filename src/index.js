@@ -16,4 +16,4 @@
  */
 import Scroller from './Scroller';
 
-module.exports = Scroller;
+export default Scroller;
