@@ -59,6 +59,8 @@ var Scroller = function(callback, options) {
 
     /** This configures the amount of change applied to acceleration when reaching boundaries  **/
     penetrationAcceleration: 0.08,
+
+    easingFunction: [ easeInOutCubic, easeOutCubic ],
   };
 
   for (var key in options) {
@@ -895,7 +897,9 @@ Scroller.prototype = {
       }.bind(this);
 
       // When continuing based on previous animation we choose an ease-out animation instead of ease-in-out
-      this.__isAnimating = animate.start(step, verify, completed, this.options.animationDuration, wasAnimating ? easeOutCubic : easeInOutCubic);
+
+      var easingFunc = !wasAnimating ? this.options.easingFunction[0] : (this.options.easingFunction[1] || this.options.easingFunction[0]);
+      this.__isAnimating = animate.start(step, verify, completed, this.options.animationDuration, easingFunc);
     } else {
       this.__scheduledLeft = this.__scrollLeft = left;
       this.__scheduledTop = this.__scrollTop = top;
