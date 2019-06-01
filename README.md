@@ -89,4 +89,4 @@ http://tinyjs.net/plugins/tinyjs-plugin-scroller.html#docs
 
 ## 感谢
 
-[Michael-Wang93](https://github.com/Michael-Wang93)
+[quentinyang](https://github.com/quentinyang)
