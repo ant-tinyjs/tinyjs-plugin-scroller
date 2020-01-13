@@ -74,7 +74,7 @@ var Scroller = function(callback, options) {
     /** This configures the amount of change applied to acceleration when reaching boundaries  **/
     penetrationAcceleration: 0.08,
 
-    easingFunction: [ easeInOutCubic, easeOutCubic ],
+    easingFunction: [easeInOutCubic, easeOutCubic],
   };
 
   for (var key in options) {
@@ -290,6 +290,22 @@ Scroller.prototype = {
   setPosition: function(left, top) {
     this.__clientLeft = left || 0;
     this.__clientTop = top || 0;
+  },
+
+  stopAnimation() {
+    // Stop deceleration
+    if (this.__isDecelerating) {
+      animate.stop(this.__isDecelerating);
+      this.__isDecelerating = false;
+      this.__interruptedAnimation = true;
+    }
+
+    // Stop animation
+    if (this.__isAnimating) {
+      animate.stop(this.__isAnimating);
+      this.__isAnimating = false;
+      this.__interruptedAnimation = true;
+    }
   },
 
   /**
